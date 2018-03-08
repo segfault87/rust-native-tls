@@ -118,13 +118,13 @@ use std::result;
 
 pub mod backend;
 
-#[cfg(any(target_os = "macos", target_os = "ios"))]
+#[cfg(all(any(target_os = "macos", target_os = "ios"), not(feature = "force_openssl")))]
 #[path = "imp/security_framework.rs"]
 mod imp;
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", not(feature = "force_openssl")))]
 #[path = "imp/schannel.rs"]
 mod imp;
-#[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "ios")))]
+#[cfg(any(not(any(target_os = "macos", target_os = "windows", target_os = "ios")), feature = "force_openssl"))]
 #[path = "imp/openssl.rs"]
 mod imp;
 
